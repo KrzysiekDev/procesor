@@ -45,13 +45,12 @@ begin
 	CC(0) := CF;
 	CC(32 downto 1) := "00000000000000000000000000000000";
 case Salu is 
-	when "0000" => res := AA; -- MOV arg1, arg2
-	when "0001" => res := BB; -- MOV arg1, arg2
+	when "0000" => res := AA; -- MOV arg1, arg2, -- LD arg1, arg2
+	when "0001" => res := BB; -- MOV arg1, arg2, -- LD arg1, arg2
 	when "0010" => res := AA + BB; -- ADD arg1, arg2
 	when "0011" => res := AA - BB; -- SUB arg1, arg2
-	when "0100" => AA := BB; -- LD arg1, arg2
 	when "0101" => if (AA = BB) then --CMPEQ arg1, arg2, wynik
-		res(31 downto 0) := "00000000000000000000000000000001";
+		res(31 downto 0) := "00000000000000000000000000000001"; -- lub przez to_signed(1, 32)
 		else
 		res(31 downto 0) := "00000000000000000000000000000000";	
 	end if;
@@ -88,7 +87,7 @@ case Salu is
 		for b in 0 to 3 loop
 			num4b := num4b + AA(n*4+b)*(2**b);
 		end loop ;
-		number := number + num4b;
+		number := number + num4b*(10**n);
 	end loop ;
 	res(32 downto 0) := "000000000000000000000000000000000";
 	counter := 0;
