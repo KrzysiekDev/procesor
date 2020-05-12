@@ -18,7 +18,7 @@ end if;
 if (RDin='1') then MBRin := D;
 end if;
 if (WRin='1') then D <= MBRout;
-else D <= "ZZZZZZZZZZZZZZZZ";
+else D <= "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
 end if;
 DI <= MBRin;
 AD <= MAR;
