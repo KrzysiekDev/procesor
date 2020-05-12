@@ -20,14 +20,14 @@ process (Salu, A, B, clk)
 	variable res, AA, BB, CC: signed (32 downto 0);
 	variable nibble: signed (3 downto 0);
 	variable number, num4b: integer;
-	variable CF,ZF,SF : std_logic;
+	variable CF,ZF,SF,PF : std_logic;
 	variable counter : integer;
-	variable index: integer;
+	variable index, q: integer;
 
 begin 
-	AA(32) := A(31);
+	AA(32) :='0';
 	AA(31 downto 0) := A;
-	BB(32) := B(31);
+	BB(32) :='0';
 	BB(31 downto 0) := B;
 	CC(0) := CF;
 	CC(32 downto 1) := "00000000000000000000000000000000";
@@ -69,25 +69,26 @@ case Salu is
 	end if;
 
 	when "1011" => 
-		number := 0;
-		--number := 
+		number := 0; 
 		 for n in 0 to 7 loop
-			number := number + to_integer(AA(4*n));
-			number := number + (2**n);
-		--	num4b := 0;
-		-- 	for b in 0 to 3 loop
-		-- 		index :=(4*n)+b;
-		-- 		num4b := num4b + AA(index)*(2**b);
-		-- 		--num4b := num4b + AA(4*n+b)*(2**b);
-		-- 	end loop ;
-		-- number := number + num4b*(10**n);
+			num4b := 0;
+		 	for b in 0 to 3 loop
+		 		if(AA((4 * n) + b) = '1') then
+		 			num4b := num4b + 2**b;
+		 		end if;
+		 	end loop ;
+		 number := number + num4b*(10**n);
 		 end loop ;
 
 	res(32 downto 0) := "000000000000000000000000000000000";
 	counter := 0;
 
 	while(number /=0) loop
- 		--res(counter) := number mod 2, 1; --to_signed(number mod 2, 1);
+		if(number mod 2 = 1) then
+ 			res(counter) := '1';
+    	else 
+    		res(counter) := '0';
+    	end if;
     	number := number/2;
     	counter := counter + 1;
 	end loop;
@@ -103,6 +104,7 @@ Y <= res(31 downto 0);
 Z <= ZF;
 S <= SF;
 C <= CF;
+P <= PF;
 
 if (clk'event and clk='1') then 
 	if (LDF='1') then 
@@ -119,7 +121,10 @@ if (clk'event and clk='1') then
 		end if;
 	end if;
 
-	CF := res(32) xor res(31);
+	CF :=res(32);
+	PF := res(31) xor res(30) xor res(29) xor res(28) xor res(27) xor res(26) xor res(25) xor res(24) xor res(23) xor res(22) xor res(21) 
+		  xor res(20) xor res(19) xor res(18) xor res(17) xor res(16) xor res(15) xor res(14) xor res(13) xor res(12) xor res(11) xor res(10) 
+		  xor res(9) xor res(8) xor res(7) xor res(6) xor res(5) xor res(4) xor res(3) xor res(2) xor res(1) xor res(0); 
 end if;
 
 end process;
