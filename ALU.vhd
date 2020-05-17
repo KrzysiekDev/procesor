@@ -7,7 +7,6 @@ entity ALU is port (
 	A : in signed(31 downto 0);
 	B : in signed(31 downto 0);
 	Salu : in bit_vector (3 downto 0);
-	LDF : in bit;
 	clk : in bit;
 	Y : out signed (31 downto 0);
 	C,Z,S,P : out std_logic );--P dodana flaga
@@ -25,8 +24,10 @@ process (Salu, A, B, clk)
 	variable index, q: integer;
 
 begin 
+	--AA(32) := A(31);
 	AA(32) :='0';
 	AA(31 downto 0) := A;
+	--BB(32) := B(31);
 	BB(32) :='0';
 	BB(31 downto 0) := B;
 	CC(0) := CF;
@@ -34,8 +35,8 @@ begin
 case Salu is 
 	when "0000" => res := AA; -- MOV arg1, arg2, -- LD arg1, arg2
 	when "0001" => res := BB; -- MOV arg1, arg2, -- LD arg1, arg2
-	when "0010" => res := AA + BB; -- ADD arg1, arg2
-	when "0011" => res := AA - BB; -- SUB arg1, arg2
+	when "0010" => res := BB + AA; -- ADD arg1, arg2
+	when "0011" => res := BB - AA; -- SUB arg1, arg2
 	when "0100" => if (AA = BB) then --CMPEQ arg1, arg2, wynik
 		res(31 downto 0) := "00000000000000000000000000000001"; -- lub przez to_signed(1, 32)
 		else
@@ -107,19 +108,19 @@ C <= CF;
 P <= PF;
 
 if (clk'event and clk='1') then 
-	if (LDF='1') then 
-		if (res = "00000000000000000") then 
-			ZF:='1';
-		else 
-			ZF:='0';
-		end if;
-
-		if (res(31)='1') then 
-			SF:='1';
-		else 
-			SF:='0';
-		end if;
+	
+	if (res = "000000000000000000000000000000000") then 
+		ZF:='1';
+	else 
+		ZF:='0';
 	end if;
+
+	if (res(31)='1') then 
+		SF:='1';
+	else 
+		SF:='0';
+	end if;
+	
 
 	CF :=res(32);
 	PF := res(31) xor res(30) xor res(29) xor res(28) xor res(27) xor res(26) xor res(25) xor res(24) xor res(23) xor res(22) xor res(21) 
@@ -129,3 +130,4 @@ end if;
 
 end process;
 end rtl;
+
