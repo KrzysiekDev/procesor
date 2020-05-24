@@ -6,8 +6,8 @@ use ieee.math_real.all;
 entity ALU is port (    
 	A : in signed(31 downto 0);
 	B : in signed(31 downto 0);
-	Salu : in bit_vector (3 downto 0);
-	clk : in bit;
+	Salu : in signed (3 downto 0);
+	clk : in std_logic;
 	Y : out signed (31 downto 0);
 	C,Z,S,P : out std_logic );--P dodana flaga
 end entity;
