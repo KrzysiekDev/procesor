@@ -15,8 +15,11 @@ entity control is port(
 	);
 end entity;
 architecture rtl of control is 
-type state_type is (fetch, fetch2, decode, MOV_R, MOV_S, ADD_R, ADD_S, SUB_R, SUB_S, LD_R, LD_S, LD_A1,LD_A2,LD_A3,LD_A4,LD_A5, CMPEQ_S, CMPEQ_A, CMPGE_S, CMPGE_A, CMPGT_S, CMPGT_A,
-					CMPLE_S, CMPLE_A, CMPLT_S, CMPLT_A, OR_S, OR_P, CMPNE_R, CMPNE_S, CMPNE_A, BCDtoB); --dodac kolejne stany
+type state_type is (fetch, fetch2, decode, MOV_R, MOV_S, ADD_R, ADD_S, SUB_R, SUB_S, LD_R, LD_S, LD_A1,LD_A2,LD_A3,LD_A4,LD_A5, CMPEQ_S, CMPEQ_A1, 
+                    CMPEQ_A2, CMPEQ_A3, CMPEQ_A4, CMPEQ_A5, CMPEQ_A6, CMPGE_S, CMPGE_A1,CMPGE_A2, CMPGE_A3, CMPGE_A4, CMPGE_A5, CMPGE_A6, CMPGT_S, 
+                    CMPGT_A1, CMPGT_A2, CMPGT_A3, CMPGT_A4, CMPGT_A5, CMPGT_A6, CMPLE_S, CMPLE_A1, CMPLE_A2, CMPLE_A3, CMPLE_A4, CMPLE_A5, 
+                    CMPLE_A6, CMPLT_S, CMPLT_A1, CMPLT_A2, CMPLT_A3, CMPLT_A4, CMPLT_A5, CMPLT_A6, OR_S, OR_A1, OR_A2, OR_A3, OR_A4, OR_A5, OR_A6, 
+                    CMPNE_R, CMPNE_S, CMPNE_A1, CMPNE_A2, CMPNE_A3, CMPNE_A4, CMPNE_A5, CMPNE_A6, BCDtoB); 
 signal state : state_type;
 
  begin
@@ -98,26 +101,21 @@ signal state : state_type;
                         			when "000" => 
                         				state <= LD_A1;
                         			when "001" =>
-                        				state <= CMPEQ_A;
+                        				state <= CMPEQ_A1;
                         			when "010" =>
-                        			 	state <= CMPGE_A;
+                        			 	state <= CMPGE_A1;
                         			when "011" =>
-                        			 	state <= CMPGT_A;
+                        			 	state <= CMPGT_A1;
                         			when "100" =>
-                        			 	state <= CMPLE_A;
+                        			 	state <= CMPLE_A1;
                         			when "101" =>
-                        			 	state <= CMPLT_A;
+                        			 	state <= CMPLT_A1;
                         			when "110" =>
-                        			 	state <= CMPNE_A;
-                        			when others =>
+                        			 	state <= CMPNE_A1;
+                                    when "111" => 
+                        			     state <= OR_A1;
+                                    when others =>
                         			 	state <= fetch;
-                        		end case;
-                        	when "111" =>
-                        		case IR(28 downto 26) is
-                        			when "000" => 
-                        				state <= OR_P;
-                        			when others =>
-                        				state <= fetch;
                         		end case;
                         	when others =>
                         		state <= fetch;
@@ -167,7 +165,91 @@ signal state : state_type;
                     when LD_A4 =>
                     	state <= LD_A5;
                     when LD_A5 =>
-                    	state <= fetch;
+                    	state <= fetch;    
+                    when CMPEQ_A1 =>
+                        state <= CMPEQ_A2;
+                    when CMPEQ_A2 =>
+                        state <= CMPEQ_A3;
+                    when CMPEQ_A3 =>
+                        state <= CMPEQ_A4;
+                    when CMPEQ_A4 =>
+                        state <= CMPEQ_A5;
+                    when CMPEQ_A5 =>
+                        state <= CMPEQ_A6;
+                    when CMPEQ_A6 =>
+                        state <= fetch;
+                    when CMPGE_A1 =>
+                        state <= CMPGE_A2;
+                    when CMPGE_A2 =>
+                        state <= CMPGE_A3;
+                    when CMPGE_A3 =>
+                        state <= CMPGE_A4;
+                    when CMPGE_A4 =>
+                        state <= CMPGE_A5;
+                    when CMPGE_A5 =>
+                        state <= CMPGE_A6;
+                    when CMPGE_A6 =>
+                        state <= fetch;
+                    when CMPGT_A1 =>
+                        state <= CMPGT_A2;
+                    when CMPGT_A2 =>
+                        state <= CMPGT_A3;
+                    when CMPGT_A3 =>
+                        state <= CMPGT_A4;
+                    when CMPGT_A4 =>
+                        state <= CMPGT_A5;
+                    when CMPGT_A5 =>
+                        state <= CMPGT_A6;
+                    when CMPGT_A6 =>
+                        state <= fetch;
+                    when CMPLE_A1 =>
+                        state <= CMPLE_A2;
+                    when CMPLE_A2 =>
+                        state <= CMPLE_A3;
+                    when CMPLE_A3 =>
+                        state <= CMPLE_A4;
+                    when CMPLE_A4 =>
+                        state <= CMPLE_A5;
+                    when CMPLE_A5 =>
+                        state <= CMPLE_A6;
+                    when CMPLE_A6 =>
+                        state <= fetch;
+                    when CMPLT_A1 =>
+                        state <= CMPLT_A2;
+                    when CMPLT_A2 =>
+                        state <= CMPLT_A3;
+                    when CMPLT_A3 =>
+                        state <= CMPLT_A4;
+                    when CMPLT_A4 =>
+                        state <= CMPLT_A5;
+                    when CMPLT_A5 =>
+                        state <= CMPLT_A6;
+                    when CMPLT_A6 =>
+                        state <= fetch;
+                    when CMPNE_A1 =>
+                        state <= CMPNE_A2;
+                    when CMPNE_A2 =>
+                        state <= CMPNE_A3;
+                    when CMPNE_A3 =>
+                        state <= CMPNE_A4;
+                    when CMPNE_A4 =>
+                        state <= CMPNE_A5;
+                    when CMPNE_A5 =>
+                        state <= CMPNE_A6;
+                    when CMPNE_A6 =>
+                        state <= fetch;
+                    when OR_A1 =>
+                        state <= OR_A2;
+                    when OR_A2 =>
+                        state <= OR_A3;
+                    when OR_A3 =>
+                        state <= OR_A4;
+                    when OR_A4 =>
+                        state <= OR_A5;
+                    when OR_A5 =>
+                        state <= OR_A6;
+                    when OR_A6 =>
+                        state <= fetch;
                     when others =>
                     	state <= fetch;
 
@@ -409,7 +491,7 @@ signal state : state_type;
 				Smar <= '1';
 				Smbr <= '0';
 				WR <= '0';
-				RD <= '0';
+				RD <= '1';
 			when LD_A2 =>
 				Salu <="0000";
     			Sbb <= "0000";
@@ -454,6 +536,468 @@ signal state : state_type;
 				Smbr <= '0';
 				WR <= '0';
 				RD <= '0';
+            when CMPEQ_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPEQ_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPEQ_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPEQ_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPEQ_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPEQ_A6 =>
+                Salu <="0100";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGE_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPGE_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGE_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPGE_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGE_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGE_A6 =>
+                Salu <="0101";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGT_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPGT_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGT_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPGT_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGT_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPGT_A6 =>
+                Salu <="0110";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLE_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPLE_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLE_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPLE_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLE_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLE_A6 =>
+                Salu <="0111";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLT_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPLT_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLT_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPLT_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLT_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPLT_A6 =>
+                Salu <="1000";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPNE_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPNE_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPNE_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when CMPNE_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPNE_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when CMPNE_A6 =>
+                Salu <="1010";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when OR_A1 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "01";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when OR_A2 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1101";
+                Sid <= "001";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when OR_A3 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "11";
+                Smar <= '1';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '1';
+            when OR_A4 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "1111";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when OR_A5 =>
+                Salu <="0000";
+                Sbb <= "0000";
+                Sbc <= "00000";
+                Sba <= "0001";
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
+            when OR_A6 =>
+                Salu <="1001";
+                Sbb <= IR(3 downto 0);
+                Sbc <= "00001";
+                Sba <= IR(3 downto 0);
+                Sid <= "000";
+                Sa <= "00";
+                Smar <= '0';
+                Smbr <= '0';
+                WR <= '0';
+                RD <= '0';
 			when others =>
 				Salu <="0000";
     			Sbb <= "0000";
@@ -469,110 +1013,3 @@ signal state : state_type;
     end process;
 end rtl;
                         	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---begin 
---process (clk, reset) 
---begin 
---if (reset = '1') then 
---	state <= m0;
---elsif (clk'event and clk='1') then 
---	case state is     
---		when m0=> state <= m1;
---        when m1=> 
---        	case IR(15 downto 13) is      
---        		when "000" => 
---        			case IR(12 downto 11) is   
---        				when "00" =>                         
---                    	if(INT='0') then 
---                    		state <= m0;
---                        else state <= m9;
---                        end if;
---   						when "01" => state <= m10;
---   						when "10" => state <= m11;
---   						when "11" => state <= m15;
---					end case;
---				when "001" => 
---					case IR(12 downto 8) is
---						when "00000" => state <= m20;
---						when "00001" => state <= m21;
---						when "00010" => state <= m23;
---						when "00011" => state <= m24;
---						when "00100" => state <= m25;
---						when "00101" => state <= m26;
---						when "00110" => state <= m27;
---						when "00111" => state <= m28;
---						when "01000" => state <= m29;
---						when "01001" => state <= m30;
---						when "01010" => state <= m31;
---						when "01011" => state <= m32;
---						when "01100" => state <= m33;
---						when "01101" => state <= m34;
---						when "01110" => state <= m35;
---						when "01111" => state <= m36;
---						when "10000" => state <= m37;
---						when "10001" => state <= m38;
---						when others => state <= m0;
---					end case;
---	when "010" => state <= m40;
---	when "011" => state <= m50;
---	when "100" => state <= m60;
---	when "101" => state <= m80;
---	when others => state <= m0;
---end case;
---when m10=> if INT = '1' then state <= m9;
---else state <= m10;
---end if;
---      when m11 => state <= m12;
---      when m12 => state <= m13;
---      when m13 => state <= m14;
---      when m14 => if INT = '1' then state <= m9;
---else state <= m0;
---end if;
---... end case;
---end if;
---end process;
---process (state) begin 
---case state is 
---when m0 => 
---	Sa <= "01"; Sbb <= "0000"; Sba <= "0000"; Sid <="001"; Sbc <="0000"; MIO <='1';
---	Smar <='1'; Smbr <= '0'; WR <='0'; RD <='1'; Salu <="0000"; INTA <='0';
---when m1 => 
---	Sa <= "00"; Sbb <= "0000"; Sba <= "0000"; Sid <="000"; Sbc <="0000"; MIO <='1';
---	Smar <='0'; Smbr <= '0'; WR <='0'; RD <='0'; Salu <="0000"; INTA <='0'; 
---when m10 => 
---	Sa <= "00"; Sbb <= "0000"; Sba <= "0000"; Sid <="000"; Sbc <="0000"; MIO <='1';
---	Smar <='0'; Smbr <= '0'; WR <='0'; RD <='0'; Salu <="0000"; INTA <='0'; 
---when m11 => 
---	Sa <= "10"; Sbb <= "1010"; Sba <= "0000"; Sid <="011"; Sbc <="0000"; MIO <='1';
---	Smar <='1'; Smbr <= '1'; WR <='1'; RD <='0'; Salu <="0000"; INTA <='0'; 
---	... 
---when others =>
---	Sa <= "00"; Sbb <= "0000"; Sba <= "0000"; Sid <="000"; Sbc <="0000"; MIO <='1';
---	Smar <='0'; Smbr <= '0'; WR <='0'; RD <='0'; Salu <="0000"; INTA <='0';
---end case;
---end process;
---end rtl;
