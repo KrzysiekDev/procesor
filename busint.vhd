@@ -4,11 +4,11 @@ use ieee.numeric_std.all;
 entity busint is port ( 
 	ADR : in signed(31 downto 0);
 	DO : in signed(31 downto 0);
-	Smar, Smbr, WRin, RDin : in bit;
+	Smar, Smbr, WRin, RDin : in std_logic;
 	AD : out signed (31 downto 0);
 	D : inout signed (31 downto 0);
 	DI : out signed(31 downto 0);
-	WR, RD : out bit );
+	WR, RD : out std_logic );
 end entity;
 architecture rtl of busint is begin process(Smar, ADR, Smbr, DO, D, WRin, RDin) variable MBRin, MBRout: signed(31 downto 0);
 variable MAR : signed(31 downto 0);
