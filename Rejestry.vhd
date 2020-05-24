@@ -17,44 +17,47 @@ entity Rejestry is port (
 end entity;
 architecture rtl of Rejestry is
 begin process (clk, Sbb, Sbc, Sba, Sid, Sa, DI) 
-variable IR, TMP, A, B, C, D, E, F: signed (31 downto 0) := to_signed(0,32);
+variable IR, TMP, C, D, E, F: signed (31 downto 0) := to_signed(0,32);
+variable A: signed (31 downto 0):= to_signed(8,32);
+variable B: signed (31 downto 0):= to_signed(18,32);
 variable AD, PC, ATMP : signed (31 downto 0) := to_signed(0,32);
 variable ES, DS, CS, AP1, AP2 : signed(15 downto 0) := to_signed(0,16); -- dodane rejestry
 variable SP : signed (31 downto 0) := x"FFFFFFFF";
 begin if (clk'event and clk='1') then 
-case Sid is 
-	when "000" =>
-		null;
-	when "001" =>
-		PC := PC + 1;
-	when "010" =>
-		SP := SP + 1;
-	when "011" =>
-		SP := SP - 1;
-	when "100" =>
-		AD := AD + 1;
-	when "101" =>
-		AD := AD - 1;
-	when others =>
-		null;
-end case;
-case Sba is 
-	when "0000" => IR := BA;
-	when "0001" => TMP := BA;
-	when "0010" => A := BA;
-	when "0011" => B := BA;
-	when "0100" => C := BA;
-	when "0101" => D := BA;
-	when "0110" => E := BA;
-	when "0111" => F := BA;
-	when "1000" => AP1 := BA(31 downto 16);
-	when "1001" => AP2 := BA(15 downto 0);
-	when "1010" => ES := BA(15 downto 0);
-	when "1011" => DS := BA(15 downto 0);
-	when "1100" => CS := BA(15 downto 0);
-	when "1101" => ATMP := BA; 
-	when others => null;
-end case; 
+	case Sid is 
+		when "000" =>
+			null;
+		when "001" =>
+			PC := PC + 1;
+		when "010" =>
+			SP := SP + 1;
+		when "011" =>
+			SP := SP - 1;
+		when "100" =>
+			AD := AD + 1;
+		when "101" =>
+			AD := AD - 1;
+		when others =>
+			null;
+	end case;
+	case Sba is 
+		when "0000" => IR := BA;
+		when "0001" => TMP := BA;
+		when "0010" => A := BA;
+		when "0011" => B := BA;
+		when "0100" => C := BA;
+		when "0101" => D := BA;
+		when "0110" => E := BA;
+		when "0111" => F := BA;
+		when "1000" => AP1 := BA(31 downto 16);
+		when "1001" => AP2 := BA(15 downto 0);
+		when "1010" => ES := BA(15 downto 0);
+		when "1011" => DS := BA(15 downto 0);
+		when "1100" => CS := BA(15 downto 0);
+		when "1101" => ATMP := BA; 
+		when others => null;
+	end case;
+end if; 
 case Sbb is 
 	when "0000" => BB <= DI;
 	when "0001" => BB <= TMP;
@@ -90,6 +93,7 @@ case Sbc is
 	when "01110" => BC <= IR and "00000000000000000000111111111111";
 	when "01111" => BC <= IR and "00000000000000001111111111111111";
 	when "10000" => BC <= IR and "00000000000000111111111111111111";
+	when "10001" => BC <= IR and "00000000000000000000000000001111";
 	when others => null;
 end case;
 case Sa is 
@@ -100,6 +104,5 @@ case Sa is
 	when others => null;
 end case;
 IRout <= IR;
-end if;
 end process;
 end rtl;
